@@ -1,6 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -55,7 +55,14 @@ edt.screenshot(student_language + student_level + "_edt.png")
 #SWITCH TO "MATIERES" SECTION
 driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo2").click()
 driver.find_element(By.ID, "GInterface.Instances[1].Instances[0].bouton_Edit").click()
-driver.find_element(By.XPATH, "//div/ul/li").click()
+time.sleep(0.5)
+driver.find_element(By.ID, "GInterface.Instances[1].Instances[0]_Liste").send_keys(Keys.ARROW_DOWN)
+driver.find_element(By.ID, "GInterface.Instances[1].Instances[0]_Liste").send_keys(Keys.RETURN)
+
+# select = Select(driver.find_element(By.ID, 'GInterface.Instances[1].Instances[0]_ContenuScroll'))
+# select.select_by_visible_text('Saisie du code')
+
+# driver.find_element(By.XPATH, "//div/ul/li").click()
 
 
 #FIRST UE3 PLANNING
