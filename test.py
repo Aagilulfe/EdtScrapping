@@ -1,7 +1,7 @@
 from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options   # for Chrome browser
 from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -58,12 +58,17 @@ except TimeoutException:
 
 edt = driver.find_element(By.ID, "id_41_c_g")
 edt.screenshot(SCREENSHOTS_SAVE_PATH + student_language + student_level + "_edt.png")
-print("=> Main planning saved")
+print("=> Main planning saved\n")
 
 #SWITCH TO "MATIERES" SECTION
 driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo2").click()
 driver.find_element(By.ID, "GInterface.Instances[1].Instances[0].bouton_Edit").click()
-time.sleep(0.5)
+try: # wait for the option to be clickable
+    myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[1].Instances[0]_1')))
+    print("\"Saisie du code\" option appeared!")
+except TimeoutException:
+    print("Loading of \"Saisie du code\" option took too much time!")
+# time.sleep(0.5)
 driver.find_element(By.ID, "GInterface.Instances[1].Instances[0]_1").click()    # Selecting "Saisie du code" option
 
 
@@ -85,7 +90,7 @@ except TimeoutException:
 edt_ue3_1 = driver.find_element(By.ID, "GInterface.Instances[1].Instances[7]")
 time.sleep(0.5)
 edt_ue3_1.screenshot(SCREENSHOTS_SAVE_PATH + student_UE3_1 + "_edt.png")
-print("=> First UE3 planning saved")
+print("=> First UE3 planning saved\n")
 
 #SECOND UE3
 driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").clear()
@@ -96,10 +101,11 @@ try: # wait for the ue3_1 to load
     print("Second UE3 is ready!")
 except TimeoutException:
     print("Loading of second UE3 took too much time!")
+print()
 edt_ue3_2 = driver.find_element(By.ID, "GInterface.Instances[1].Instances[7]")
 time.sleep(0.5)
 edt_ue3_2.screenshot(SCREENSHOTS_SAVE_PATH + student_UE3_2 + "_edt.png")
-print("=> Second UE3 planning saved")
+print("=> Second UE3 planning saved\n")
 
 
 ########################
