@@ -1,5 +1,6 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.chrome.options import Options   # for Chrome browser
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
@@ -16,15 +17,19 @@ student_UE3_2 = "ECOA130g"
 
 ##################################
 
-# DRIVER_PATH = 'chromedriver'
+# DRIVER_PATH = 'chromedriver'    # for Chrome browser
 DRIVER_PATH = 'geckodriver'
+
+SCREENSHOTS_SAVE_PATH = 'screenshots/'
 
 options = Options()
 options.headless = False    # flag to decide if the page is displayed (False) or not (True)
 options.add_argument("--window-size=1920,1200")
 # options.add_argument("--window-size=970,600") #bad dimensions
 
-driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
+# driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)     # for Chrome browser
+# driver = webdriver.Firefox(options=options, executable_path=DRIVER_PATH)
+driver = webdriver.Firefox(options=options)
 driver.get("https://planning.inalco.fr/public")
 
 with open("source_code.html", "w") as file:
@@ -51,7 +56,7 @@ except TimeoutException:
     print("Loading of table took too much time!")
 
 edt = driver.find_element(By.ID, "GInterface.Instances[1].Instances[7]")
-edt.screenshot(student_language + student_level + "_edt.png")
+edt.screenshot(SCREENSHOTS_SAVE_PATH + student_language + student_level + "_edt.png")
 print("=> Main planning saved")
 
 #SWITCH TO "MATIERES" SECTION
@@ -79,7 +84,7 @@ except TimeoutException:
     print("Loading of first UE3 took too much time!")
 edt_ue3_1 = driver.find_element(By.ID, "GInterface.Instances[1].Instances[7]")
 time.sleep(0.5)
-edt_ue3_1.screenshot(student_UE3_1 + "_edt.png")
+edt_ue3_1.screenshot(SCREENSHOTS_SAVE_PATH + student_UE3_1 + "_edt.png")
 print("=> First UE3 planning saved")
 
 #SECOND UE3
@@ -93,7 +98,7 @@ except TimeoutException:
     print("Loading of second UE3 took too much time!")
 edt_ue3_2 = driver.find_element(By.ID, "GInterface.Instances[1].Instances[7]")
 time.sleep(0.5)
-edt_ue3_2.screenshot(student_UE3_2 + "_edt.png")
+edt_ue3_2.screenshot(SCREENSHOTS_SAVE_PATH + student_UE3_2 + "_edt.png")
 print("=> Second UE3 planning saved")
 
 
