@@ -23,7 +23,8 @@ DRIVER_PATH = 'geckodriver'
 SCREENSHOTS_SAVE_PATH = 'screenshots/'
 
 options = Options()
-options.headless = False    # flag to decide if the page is displayed (False) or not (True)
+# options.headless = True    # flag to decide if the page is displayed (False) or not (True)
+# options.add_argument("-headless")
 options.add_argument("--window-size=1920,1200")
 # options.add_argument("--window-size=970,600") #bad dimensions
 
@@ -32,8 +33,8 @@ options.add_argument("--window-size=1920,1200")
 driver = webdriver.Firefox(options=options)
 driver.get("https://planning.inalco.fr/public")
 
-with open("source_code.html", "w") as file:
-    file.write(driver.page_source)
+# with open("source_code.html", "w") as file:
+#     file.write(driver.page_source)
 # print(driver.page_source)
 
 delay = 3 # timeout delay in seconds
@@ -48,6 +49,7 @@ except TimeoutException:
 #MAIN PLANNING
 driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(student_language + " " + student_level)
 driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(Keys.RETURN)
+# time.sleep(30)
 
 try: # wait for the table to load
     myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[7]')))
