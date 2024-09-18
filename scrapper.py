@@ -35,32 +35,56 @@ class Scrapper():
 
         try: # wait for the webpage to load
             myElem = WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[1].bouton_Edit')))
-            print("Page is ready!")
+            print("Webpage is ready!\n")
         except TimeoutException:
             print("Loading of page took too much time!")
 
 
-    def get_main_planning(self, student_language: str, student_level: str) -> None: # UE1 & UE2
+    def get_promotion_by_name(self, student_language: str, student_level: str) -> None: # UE1 & UE2
 
-        self.__goto_promotions_section()
-
+        # Name search
         self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(student_language + " " + student_level)
         self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(Keys.RETURN)
 
-        try: # wait for the table to load
+        # Wait for the promotion planning to load
+        try:
             myElem = WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[7]')))
-            print("Table is ready!")
+            print("Promotion " + student_language + " " + student_level + " planning is ready!")
         except TimeoutException:
             print("Loading of table took too much time!")
 
         edt = self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[7]")
         edt.screenshot(self.SCREENSHOTS_SAVE_PATH + student_language + student_level + "_edt.png")
-        print("=> Main planning saved\n")
+        print("=> Promotion " + student_language + " " + student_level + " planning saved\n")
 
 
-    def get_class_by_code(self, class_code: str) -> None:
+    def get_class_by_code(self, class_code: str) -> None:   # ELECTIVE CLASSES
 
-        self.__goto_matieres_section()
+        # Code search
+        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(class_code)
+        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(Keys.RETURN)
+
+        # Wait for the class planning to load
+        try:
+            myElem = WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[7]')))
+            print("Class " + class_code + " planning is ready!")
+        except TimeoutException:
+            print("Loading of " + class_code + " took too much time!")
+        
+        edt_ue3_1 = self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[7]")
+        edt_ue3_1.screenshot(self.SCREENSHOTS_SAVE_PATH + class_code + "_edt.png")
+        print("=> Class " + class_code + " planning saved\n")
+
+
+    def goto_promotions_section(self):
+        # Switch to "PROMOTIONS" section
+        time.sleep(0.25)
+        self.driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo1").click()
+
+    def goto_matieres_section(self):
+        # Switch to "MATIERES" section
+        time.sleep(0.25)
+        self.driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo2").click()
 
         # Change the search mode
         self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[0].bouton_Edit").click()
@@ -79,29 +103,3 @@ class Scrapper():
             print("Matieres section is ready!")
         except TimeoutException:
             print("Loading of matieres section took too much time!")
-
-        # Code search
-        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(class_code)
-        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(Keys.RETURN)
-
-        # Wait for the class planning to load
-        try:
-            myElem = WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[7]')))
-            print("Class " + class_code + " planning is ready!")
-        except TimeoutException:
-            print("Loading of " + class_code + " took too much time!")
-        edt_ue3_1 = self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[7]")
-        time.sleep(0.5)
-        edt_ue3_1.screenshot(self.SCREENSHOTS_SAVE_PATH + class_code + "_edt.png")
-        print("=> Class " + class_code + " planning saved\n")
-
-
-    def __goto_promotions_section(self):
-        # Switch to "PROMOTIONS" section
-        time.sleep(0.25)
-        self.driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo1").click()
-
-    def __goto_matieres_section(self):
-        # Switch to "MATIERES" section
-        time.sleep(0.25)
-        self.driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo2").click()
