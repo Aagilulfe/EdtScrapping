@@ -17,8 +17,8 @@ student_UE3_2 = "ECOA130g"
 
 ##################################
 
-# DRIVER_PATH = 'chromedriver'    # for Chrome browser
-DRIVER_PATH = 'geckodriver'
+# DRIVER_PATH = 'drivers/chromedriver'    # for Chrome browser
+DRIVER_PATH = 'drivers/geckodriver'
 
 SCREENSHOTS_SAVE_PATH = 'screenshots/'
 
@@ -106,4 +106,4 @@ print("=> Second UE3 planning saved")
 if not (options.arguments[0] == '-headless'):
     time.sleep(3)
 driver.quit()
-print("Page closed.")
+print("Session closed.")
