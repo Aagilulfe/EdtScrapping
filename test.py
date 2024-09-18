@@ -16,7 +16,8 @@ student_UE3_2 = "ECOA130g"
 
 ##################################
 
-DRIVER_PATH = 'chromedriver'
+# DRIVER_PATH = 'chromedriver'
+DRIVER_PATH = 'geckodriver'
 
 options = Options()
 options.headless = False    # flag to decide if the page is displayed (False) or not (True)
