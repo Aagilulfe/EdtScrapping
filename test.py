@@ -24,7 +24,7 @@ SCREENSHOTS_SAVE_PATH = 'screenshots/'
 
 options = Options()
 # options.headless = True    # flag to decide if the page is displayed (False) or not (True)
-# options.add_argument("-headless")
+options.add_argument("-headless")
 options.add_argument("--window-size=1920,1200")
 # options.add_argument("--window-size=970,600") #bad dimensions
 
@@ -46,18 +46,17 @@ try: # wait for the page to load
 except TimeoutException:
     print("Loading of page took too much time!")
 
-#MAIN PLANNING
+#MAIN PLANNING (UE1 & UE2)
 driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(student_language + " " + student_level)
 driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(Keys.RETURN)
-# time.sleep(30)
 
 try: # wait for the table to load
-    myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[7]')))
+    myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'id_41_c_g')))
     print("Table is ready!")
 except TimeoutException:
     print("Loading of table took too much time!")
 
-edt = driver.find_element(By.ID, "GInterface.Instances[1].Instances[7]")
+edt = driver.find_element(By.ID, "id_41_c_g")
 edt.screenshot(SCREENSHOTS_SAVE_PATH + student_language + student_level + "_edt.png")
 print("=> Main planning saved")
 
@@ -65,8 +64,7 @@ print("=> Main planning saved")
 driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo2").click()
 driver.find_element(By.ID, "GInterface.Instances[1].Instances[0].bouton_Edit").click()
 time.sleep(0.5)
-driver.find_element(By.ID, "GInterface.Instances[1].Instances[0]_Liste").send_keys(Keys.ARROW_DOWN)
-driver.find_element(By.ID, "GInterface.Instances[1].Instances[0]_Liste").send_keys(Keys.RETURN)
+driver.find_element(By.ID, "GInterface.Instances[1].Instances[0]_1").click()    # Selecting "Saisie du code" option
 
 
 #LOAD UE3 PLANNINGS
@@ -105,7 +103,7 @@ print("=> Second UE3 planning saved")
 
 
 ########################
-if not options.headless:
+if not (options.arguments[0] == '-headless'):
     time.sleep(3)
 driver.quit()
 print("Page closed.")
