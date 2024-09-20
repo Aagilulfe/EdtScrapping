@@ -49,7 +49,7 @@ class Scrapper():
     def get_promotion_by_name(self, student_language: str, student_level: str) -> None: # UE1 & UE2
 
         if self.promotion_function_never_called:
-            self.goto_promotions_section()
+            self.__goto_promotions_section()
             self.promotion_function_never_called = False    # Already called once, now
 
         # Name search
@@ -63,7 +63,7 @@ class Scrapper():
     def get_matiere_by_code(self, class_code: str) -> None:   # ELECTIVE CLASSES
 
         if self.matiere_function_never_called:
-            self.goto_matieres_section()
+            self.__goto_matieres_section()
             self.matiere_function_never_called = False      # Already called once, now
 
         # Code search
@@ -74,14 +74,14 @@ class Scrapper():
         print("=> Class " + class_code + " planning saved\n")
 
 
-    def goto_promotions_section(self) -> None:
+    def __goto_promotions_section(self) -> None:
         # Switch to "PROMOTIONS" section
         WebDriverWait(self.driver, self.delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[0].Instances[1]_Combo1')))
         self.driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo1").click()
         print("\"Saisie du nom\" option selected!\n")
 
 
-    def goto_matieres_section(self) -> None:
+    def __goto_matieres_section(self) -> None:
         # Switch to "MATIERES" section
         WebDriverWait(self.driver, self.delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[0].Instances[1]_Combo2')))
         self.driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo2").click()
