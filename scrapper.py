@@ -6,7 +6,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.remote.webelement import WebElement
+from typing import Type
 import time
+
+"""
+Scrapping class for INALCO hyperplanning
+
+NB: It's mandatory to begin with promotion scrapping, and then finish with class scrapping. No alternation.
+"""
 
 class Scrapper():
     
@@ -19,6 +27,9 @@ class Scrapper():
         self.headless = headless
         self.window_size = window_size
         self.delay = 3
+        self.last_element_retrieved = None
+        self.promotion_function_never_called = True
+        self.matiere_function_never_called = True
 
         # Options definition
         self.options = Options()
@@ -34,7 +45,7 @@ class Scrapper():
     def webpage_loading(self) -> None:
 
         try: # wait for the webpage to load
-            myElem = WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[1].bouton_Edit')))
+            WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[1].bouton_Edit')))
             print("Webpage is ready!\n")
         except TimeoutException:
             print("Loading of page took too much time!")
@@ -42,50 +53,39 @@ class Scrapper():
 
     def get_promotion_by_name(self, student_language: str, student_level: str) -> None: # UE1 & UE2
 
+        if self.promotion_function_never_called:
+            self.goto_promotions_section()
+            self.promotion_function_never_called = False    # Already called once, now
+
         # Name search
-        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").clear()
-        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(student_language + " " + student_level)
-        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(Keys.RETURN)
-        time.sleep(0.2)
+        self.__make_search(student_language + " " + student_level)
 
-        # Wait for the promotion planning to load
-        try:
-            myElem = WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.CLASS_NAME, 'ObjetGrille.GrilleNonInverse')))
-            print("Promotion " + student_language + " " + student_level + " planning is ready!")
-        except TimeoutException:
-            print("Loading of table took too much time!")
-
-        edt = self.driver.find_element(By.CLASS_NAME, "ObjetGrille.GrilleNonInverse")
-        edt.screenshot(self.SCREENSHOTS_SAVE_PATH + student_language + student_level + "_edt.png")
+        # Take a screenshot of the planning
+        self.__save_planning(self.SCREENSHOTS_SAVE_PATH + student_language + student_level + "_edt.png")
         print("=> Promotion " + student_language + " " + student_level + " planning saved\n")
 
 
-    def get_class_by_code(self, class_code: str) -> None:   # ELECTIVE CLASSES
+    def get_matiere_by_code(self, class_code: str) -> None:   # ELECTIVE CLASSES
+
+        if self.matiere_function_never_called:
+            self.goto_matieres_section()
+            self.matiere_function_never_called = False      # Already called once, now
 
         # Code search
-        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").clear()
-        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(class_code)
-        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(Keys.RETURN)
-        time.sleep(0.2)
+        self.__make_search(class_code)
 
-        # Wait for the class planning to load
-        try:
-            myElem = WebDriverWait(self.driver, self.delay).until(EC.visibility_of_element_located((By.CLASS_NAME, 'ObjetGrille.GrilleNonInverse')))
-            print("Class " + class_code + " planning is ready!")
-        except TimeoutException:
-            print("Loading of " + class_code + " took too much time!")
-        
-        edt_ue3_1 = self.driver.find_element(By.CLASS_NAME, "ObjetGrille.GrilleNonInverse")
-        edt_ue3_1.screenshot(self.SCREENSHOTS_SAVE_PATH + class_code + "_edt.png")
+        # Take a screenshot of the planning
+        self.__save_planning(self.SCREENSHOTS_SAVE_PATH + class_code + "_edt.png")
         print("=> Class " + class_code + " planning saved\n")
 
 
-    def goto_promotions_section(self):
+    def goto_promotions_section(self) -> None:
         # Switch to "PROMOTIONS" section
         WebDriverWait(self.driver, self.delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[0].Instances[1]_Combo1')))
         self.driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo1").click()
 
-    def goto_matieres_section(self):
+
+    def goto_matieres_section(self) -> None:
         # Switch to "MATIERES" section
         WebDriverWait(self.driver, self.delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[0].Instances[1]_Combo2')))
         self.driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo2").click()
@@ -95,15 +95,37 @@ class Scrapper():
 
         # Wait for the option "Saisie du code" to be clickable
         try:
-            myElem = WebDriverWait(self.driver, self.delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[1].Instances[0]_1')))
+            WebDriverWait(self.driver, self.delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[1].Instances[0]_1')))
             print("\"Saisie du code\" option selected!\n")
         except TimeoutException:
             print("Loading of \"Saisie du code\" option took too much time!")
         self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[0]_1").click()    # Selecting "Saisie du code" option
 
-        # Wait for the "MATIERES" section to load correctly
-        # try:
-        #     myElem = WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[1].bouton_Edit')))
-        #     print("Matieres section is ready!\n")
-        # except TimeoutException:
-        #     print("Loading of matieres section took too much time!")
+
+    def __has_changed(self, driver: Type[webdriver.Firefox]) -> bool:
+        # Method that checks if grid changed
+        if self.last_element_retrieved == None:
+            return True
+
+        new_grid = driver.find_element(By.CLASS_NAME, "ObjetGrille.GrilleNonInverse")
+        return not(self.last_element_retrieved.id == new_grid.id)
+    
+
+    def __save_planning(self, file_name: str) -> None:
+        # Wait for the class planning to load
+        WebDriverWait(self.driver, self.delay).until(EC.visibility_of_element_located((By.CLASS_NAME, 'ObjetGrille.GrilleNonInverse')))
+        
+        # Wait for the new class grid to load (else, the same grid would be saved)
+        WebDriverWait(self.driver, self.delay).until(self.__has_changed)
+        print("The grid correctly changed!")
+        planning = self.driver.find_element(By.CLASS_NAME, "ObjetGrille.GrilleNonInverse")
+        planning.screenshot(file_name)
+        
+        # Update last_element_retrieved variable with the last saved element
+        self.last_element_retrieved = planning
+
+
+    def __make_search(self, search_input: str) -> None:
+        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").clear()
+        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(search_input)
+        self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit").send_keys(Keys.RETURN)
