@@ -1,19 +1,20 @@
 from scrapper import Scrapper
 import os
-# import time
 
 """""""""""Student Info"""""""""""
 
-STUDENT_LANGUAGE = "Roumain"
-STUDENT_LEVEL = "L1"
 STUDENT_PROMOTIONS = [("Polonais", "L3"), ("Relations International (RI)", "L3")]
-STUDENT_ELECTIVE_CLASSES = ["ECOA130d", "ECOA130g"]
+STUDENT_ELECTIVE_CLASSES = ["ECOA330c", "ENJB240a"]
 
 
 """""""""""""""Paths"""""""""""""""
 
 DRIVER_PATH = 'drivers/geckodriver'
 SCREENSHOTS_SAVE_PATH = 'screenshots/'
+
+if not(os.path.isdir('screenshots')):
+    print("No directory for output screenshots. Creating one...\n")
+    os.makedirs('screenshots')
 
 # Folder cleaning
 for file in os.listdir(SCREENSHOTS_SAVE_PATH):

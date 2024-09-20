@@ -1,14 +1,11 @@
 from selenium import webdriver
-# from selenium.webdriver.chrome.options import Options   # for Chrome browser
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-# from selenium.webdriver.remote.webelement import WebElement
 from typing import Type
-import time
 
 """
 Scrapping class for INALCO hyperplanning
@@ -81,6 +78,7 @@ class Scrapper():
         # Switch to "PROMOTIONS" section
         WebDriverWait(self.driver, self.delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[0].Instances[1]_Combo1')))
         self.driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo1").click()
+        print("\"Saisie du nom\" option selected!\n")
 
 
     def goto_matieres_section(self) -> None:
