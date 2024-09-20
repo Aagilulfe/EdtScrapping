@@ -66,18 +66,21 @@ print("nb of cols: ", cols)
 # Printing the table headers 
 print("Locators           "+"             Description") 
   
-# Printing the data of the table 
-for r in range(1, rows+1): 
-    for p in range(1, cols+1): 
-        
+# Printing the data of the table
+data_list = []
+for r in range(1, rows+1):
+    data_row = []
+    for p in range(1, cols+1):
         # obtaining the text from each column of the table
         try:
             value = driver.find_element(By.XPATH, 
-                "/html/body/div[3]/div[1]/div[2]/div/div[1]/div[3]/div/div[1]/table/tbody/tr["+str(r)+"]/td["+str(p)+"]").text 
-            print(value, end='       ')
+                "/html/body/div[3]/div[1]/div[2]/div/div[1]/div[3]/div/div[1]/table/tbody/tr["+str(r)+"]/td["+str(p)+"]").text
+            data_row.append(value)
+            # print(value, end='     ')
         except NoSuchElementException:
             break
-    print() 
+    data_list.append(data_row)
+    # print() 
 
 
 
@@ -87,3 +90,6 @@ if not (options.arguments[0] == '-headless'):
     time.sleep(20)
 driver.quit()
 print("Session closed.")
+
+for line in data_list:
+    print(line)
