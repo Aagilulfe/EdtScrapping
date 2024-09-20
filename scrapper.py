@@ -44,11 +44,9 @@ class Scrapper():
 
     def webpage_loading(self) -> None:
 
-        try: # wait for the webpage to load
-            WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[1].bouton_Edit')))
-            print("Webpage is ready!\n")
-        except TimeoutException:
-            print("Loading of page took too much time!")
+        # Wait for the webpage to load
+        WebDriverWait(self.driver, self.delay).until(EC.presence_of_element_located((By.ID, 'GInterface.Instances[1].Instances[1].bouton_Edit')))
+        print("Webpage is ready!\n")
 
 
     def get_promotion_by_name(self, student_language: str, student_level: str) -> None: # UE1 & UE2
@@ -94,12 +92,9 @@ class Scrapper():
         self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[0].bouton_Edit").click()
 
         # Wait for the option "Saisie du code" to be clickable
-        try:
-            WebDriverWait(self.driver, self.delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[1].Instances[0]_1')))
-            print("\"Saisie du code\" option selected!\n")
-        except TimeoutException:
-            print("Loading of \"Saisie du code\" option took too much time!")
+        WebDriverWait(self.driver, self.delay).until(EC.element_to_be_clickable((By.ID, 'GInterface.Instances[1].Instances[0]_1')))
         self.driver.find_element(By.ID, "GInterface.Instances[1].Instances[0]_1").click()    # Selecting "Saisie du code" option
+        print("\"Saisie du code\" option selected!\n")
 
 
     def __has_changed(self, driver: Type[webdriver.Firefox]) -> bool:
