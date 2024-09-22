@@ -131,7 +131,7 @@ def getDay(prefix):
             return d
     raise UserWarning("Invalid day: {0}".format(prefix))
 
-def parseTxt(data):
+def parser(data):
     latest = 0
     earliest = 24
     events = [Event('', '', '', '', '', '', '')]
@@ -167,7 +167,7 @@ def plotEvent(e):
 
 
 
-events, earliest, latest = parseTxt(data)
+events, earliest, latest = parser(data)
 
 fig = plt.figure(figsize=(18, 9))
 
