@@ -63,12 +63,9 @@ class Scrapper():
         self.__switch_to_search_by_code()
         for elective_class in student_elective_classes:
             elective_class_data = self.__get_matiere_list(elective_class)
-            # print(elective_class_data)
             data += elective_class_data
             print("Class " + elective_class + " list has been saved.")
 
-        # for line in data:
-        #     print(line)
         events, earliest, latest = self.__parser(data)
 
         plt.figure(figsize=(18, 9))
@@ -121,8 +118,7 @@ class Scrapper():
         
         # Obtain the number of columns in table 
         cols = len(self.driver.find_elements(By.XPATH, 
-            "/html/body/div[3]/div[1]/div[2]/div/div[1]/div[3]/div/div[1]/table/tbody/tr[3]/td")) 
-        # print("rows", rows, "cols", cols)
+            "/html/body/div[3]/div[1]/div[2]/div/div[1]/div[3]/div/div[1]/table/tbody/tr[3]/td"))
 
         # Getting the data from the table
         data_list = []
@@ -134,7 +130,6 @@ class Scrapper():
                 try:
                     value = self.driver.find_element(By.XPATH, 
                         "/html/body/div[3]/div[1]/div[2]/div/div[1]/div[3]/div/div[1]/table/tbody/tr["+str(r)+"]/td["+str(p)+"]").text
-                    # print(value, end='     ')
                     if (" Gpe " in value) and (value[-1] != str(student_group)):
                         data_row = []
                         break
@@ -149,8 +144,6 @@ class Scrapper():
                     break
             if len(data_row) > 2 and data_row[-1] != "" and data_row[-1] != " ":
                 data_list.append(data_row)
-                # print(data_row)
-            # print()
         return data_list
 
 
@@ -182,11 +175,6 @@ class Scrapper():
         # Obtain the number of columns in table 
         cols = len(self.driver.find_elements(By.XPATH, 
             "/html/body/div[3]/div[1]/div[2]/div/div[1]/div[3]/div/div[1]/table/tbody/tr[2]/td"))
-        # print("rows", rows, "cols", cols)
-        # page_source = self.driver.page_source
-        # fileToWrite = open("page_source.html", "w")
-        # fileToWrite.write(page_source)
-        # fileToWrite.close()
         
         # Getting the data from the table
         data_list = []
@@ -198,7 +186,6 @@ class Scrapper():
                 try:
                     value = self.driver.find_element(By.XPATH, 
                         "/html/body/div[3]/div[1]/div[2]/div/div[1]/div[3]/div/div[1]/table/tbody/tr["+str(r)+"]/td["+str(p)+"]").text
-                    # print(value, end='     ')
                     if p == 1 and value != "" and value != " ":     # If date row
                         day = value.split(sep=" ")[0]
                         break
@@ -210,10 +197,6 @@ class Scrapper():
                     break
             if len(data_row) > 2 and data_row[-1] != "" and data_row[-1] != " ":
                 data_list.append(data_row)
-                # print(data_row)
-            # print()
-        # for line in data_list:
-        #     print(line)
         return data_list
 
 
@@ -335,7 +318,6 @@ class Scrapper():
 
     def __plotEvent(self, e):
         for day in e.days:
-            # print(e)
             d = self.DAYS.index(day) + 0.52
             start = float(e.startH) + float(e.startM) / 60
             end = float(e.endH) + float(e.endM) / 60

@@ -21,7 +21,7 @@ for file in os.listdir(SCREENSHOTS_SAVE_PATH):
     os.remove(SCREENSHOTS_SAVE_PATH + file)
 
 
-# First scrapper instanciation
+"""First scrapper instanciation"""
 # scrapper_first = Scrapper(DRIVER_PATH=DRIVER_PATH, SCREENSHOTS_SAVE_PATH=SCREENSHOTS_SAVE_PATH, headless=True)
 
 # scrapper_first.webpage_loading()
@@ -33,6 +33,6 @@ for file in os.listdir(SCREENSHOTS_SAVE_PATH):
 #     scrapper_first.get_matiere_by_code(class_code=code)
 
 
-# Second scrapper instanciation
+"""Second scrapper instanciation"""
 scrapper_second = Scrapper(DRIVER_PATH=DRIVER_PATH, SCREENSHOTS_SAVE_PATH=SCREENSHOTS_SAVE_PATH, headless=True)
 scrapper_second.draw_week_planning(STUDENT_PROMOTIONS, STUDENT_ELECTIVE_CLASSES)
