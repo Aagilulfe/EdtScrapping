@@ -7,7 +7,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
-from pandas import DataFrame
 from namedlist import namedlist
 import matplotlib.pyplot as plt
 from math import ceil
